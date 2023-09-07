@@ -6,6 +6,7 @@ const taskManagerController = require('../controllers/trainerControllers/taskSch
 const auth = require('../middlewares/auth')
 
 {/* Profile*/}
+
 router.post('/login',profileController.login)
 router.post('/otpLogin',profileController.otpLogin)
 router.get('/trainerDetails',auth.verifyTrainerToken,profileController.loadTrainerProfile)
