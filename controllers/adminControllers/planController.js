@@ -49,8 +49,8 @@ const planDetails = async (req, res) => {
 
 const addPlan = async (req, res) => {
     try {
-        const { name, description, imageSrc, price } = req.body; 
-        const plan = await planModel.findOne({name: name});
+        const { name, description, imageSrc, price, features } = req.body;
+        const plan = await planModel.findOne({ name: name });
         if (plan) {
             return res.status(409).json({ errMsg: "Plan already exists" });
         } else {
@@ -59,6 +59,7 @@ const addPlan = async (req, res) => {
                 description,
                 imageSrc,
                 price,
+                features,
             });
             res.status(200).json({ message: "Plan added" });
         }
@@ -67,6 +68,7 @@ const addPlan = async (req, res) => {
         res.status(500).json({ errMsg: "Server Error" });
     }
 };
+
 
 
 //////////////ASSIGN PLAN/////////////////

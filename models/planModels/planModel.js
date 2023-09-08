@@ -21,6 +21,9 @@ const planSchema = mongoose.Schema({
     isActive:{
         type: Boolean,
         default:false,
+    },
+    features: {
+        type: [String]
     }
 })
 
