@@ -89,7 +89,7 @@ const assignPlan = async (req, res) => {
 const updatePlan = async (req, res) => {
     try {
         const { planId } = req.params;
-        const { name, description, imageSrc, price } = req.body;
+        const { name, description, imageSrc, price, features } = req.body;
 
         const plan = await planModel.findById(planId);
         if (!plan) {
@@ -105,7 +105,8 @@ const updatePlan = async (req, res) => {
             name,
             description,
             imageSrc,
-            price
+            price,
+            features,
         });
 
         res.status(200).json({ message: "Plan updated successfully" });
