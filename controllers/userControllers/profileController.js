@@ -14,13 +14,13 @@ const sendVerifyMail = async (name, email, userId) => {
             port: 465,
             secure: true,
             auth: {
-                user: 'freshorgani@gmail.com',
+                user: process.env.EMAIL,
                 pass: process.env.EMAILPASS
             },
         });
 
         const mailOption = {
-            from: 'StepzFit@gmail.com',
+            from: process.env.EMAIL,
             to: email,
             subject: 'Email verification',
             html: `<p>Hii ${name}, Click <a href="${process.env.FRONTENDURL}/emailVerify/${userId}">here</a> to verify your email.</p>`,
@@ -50,13 +50,13 @@ const sendForgottPasswordMail = async (email, name, userId) => {
             port: 465,
             secure: true,
             auth: {
-                user: 'freshorgani@gmail.com',
+                user: process.env.EMAIL,
                 pass: process.env.EMAILPASS
             },
         });
 
         const mailOption = {
-            from: 'freshorgani@gmail.com',
+            from: process.env.EMAIL,
             to: email,
             subject: 'Forgott password',
             html: `<p>Hii ${name}, Click <a href="${process.env.FRONTENDURL}/resetPassword/${userId}">here</a> to reset your password.</p>`,

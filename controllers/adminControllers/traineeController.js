@@ -1,5 +1,6 @@
 const userModel = require('../../models/userSideModels/userModel')
 const nodemailer = require('nodemailer')
+require('dotenv').config()
 
 
 //////////////BLOCK/UNBLOCK///////////
@@ -24,13 +25,13 @@ const userStatus = async (req, res) => {
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'freshorgani@gmail.com',
+                        user: process.env.EMAIL,
                         pass: process.env.EMAILPASS
                     },
                 });
 
                 const mailOption = {
-                    from: 'freshorgani@gmail.com',
+                    from: process.env.EMAIL,
                     to: user.email,
                     subject: 'Blocked by admin',
                     html: `<p>Hii ${user.name}, You are blocked by Admin.</p>`,

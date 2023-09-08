@@ -8,7 +8,7 @@ const userRouter = require('./routers/userRouter')
 const adminRouter = require('./routers/adminRouter')
 const trainerRouter = require('./routers/trainerRouter')
 const chatRouter = require('./routers/chatRouter')
-
+require('dotenv').config()
 
 const app = express()
 
@@ -30,7 +30,7 @@ const server = app.listen(process.env.PORT, () => {
 
 const io = require('socket.io')(server, {
     cors: {
-        origin: 'http://localhost:5173',
+        origin: process.env.SOCKETURL,
         credentials: true
     }
 })
