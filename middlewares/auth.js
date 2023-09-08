@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
+const userModel = require('../models/userSideModels/userModel')
 
 
 module.exports = {
@@ -19,8 +20,9 @@ module.exports = {
             }
 
             const verified = jwt.verify(token, process.env.JWTSECRET)
+            const user = await userModel.findOne({_id:verified.id})
 
-            if (verified.role === 'user') {
+            if (verified.role === 'user'&&!user.isBlocked) {
                 req.payload = verified
                 next()
             } else {
