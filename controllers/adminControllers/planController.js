@@ -14,6 +14,7 @@ const plans = async (req, res) => {
     }
 }
 
+
 //////////////GET PLANS AND TRAINEE DETAILS/////////////////
 
 const traineePlanDetails = async (req, res) => {
@@ -33,7 +34,6 @@ const planDetails = async (req, res) => {
     try {
         const planId = req.params.planId;
         const plan = await planModel.findOne({ _id: planId });
-
         if (!plan) {
             return res.status(404).json({ errMsg: "Plan not found" });
         }

@@ -10,8 +10,21 @@ require('dotenv').config()
 
 const getPlans = async (req, res) => {
     try {
-        console.log('======');
         const plans = await planModel.find({})
+        res.status(200).json({ plans })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ errMsg: "Server Error" })
+    }
+}
+
+//////////////GET PLANS/////////////////
+
+const getPlanDetails = async (req, res) => {
+    const planId = req.params
+    console.log(planId+'=====');
+    try {
+        const plans = await planModel.find({_id:planId})
         res.status(200).json({ plans })
     } catch (error) {
         console.log(error.message);
@@ -281,6 +294,7 @@ const editProfile = async (req, res) => {
 
 module.exports = {
     getPlans,
+    getPlanDetails,
     register,
     login,
     loadProfile,

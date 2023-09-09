@@ -4,6 +4,7 @@ const userController = require('../controllers/userControllers/profileController
 const bodyMetricsController = require('../controllers/userControllers/bodyMetricsController')
 const taskController = require('../controllers/userControllers/taskController')
 const foodController = require('../controllers/userControllers/foodControler')
+const planController = require('../controllers/adminControllers/planController')
 
 const auth = require('../middlewares/auth')
 
@@ -11,7 +12,8 @@ const auth = require('../middlewares/auth')
 
 router.post('/register',userController.register)
 router.get('/verify/:userId',userController.verifyMail)
-router.get('/plans',userController.getPlans)
+router.get('/plans',planController.plans)
+router.get('/planDetails/:planId',planController.planDetails)
 router.post('/login',userController.login)
 router.post('/otpLogin',userController.otpLogin)
 router.post('/resetPassword',userController.resetPassword)
