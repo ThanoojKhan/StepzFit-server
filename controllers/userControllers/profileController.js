@@ -1,8 +1,23 @@
 const userModel = require('../../models/userSideModels/userModel')
+const planModel = require('../../models/planModels/planModel')
 const nodemailer = require('nodemailer')
 const sha256 = require('js-sha256')
 const { generateToken } = require('../../middlewares/auth')
 require('dotenv').config()
+
+
+//////////////GET PLANS/////////////////
+
+const getPlans = async (req, res) => {
+    try {
+        console.log('======');
+        const plans = await planModel.find({})
+        res.status(200).json({ plans })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ errMsg: "Server Error" })
+    }
+}
 
 
 ///////////////SEND VERIFY MAIL/////////////
@@ -265,6 +280,7 @@ const editProfile = async (req, res) => {
 
 
 module.exports = {
+    getPlans,
     register,
     login,
     loadProfile,

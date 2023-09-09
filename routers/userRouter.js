@@ -11,6 +11,7 @@ const auth = require('../middlewares/auth')
 
 router.post('/register',userController.register)
 router.get('/verify/:userId',userController.verifyMail)
+router.get('/plans',userController.getPlans)
 router.post('/login',userController.login)
 router.post('/otpLogin',userController.otpLogin)
 router.post('/resetPassword',userController.resetPassword)
