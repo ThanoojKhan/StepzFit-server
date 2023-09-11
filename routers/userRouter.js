@@ -5,7 +5,6 @@ const bodyMetricsController = require('../controllers/userControllers/bodyMetric
 const taskController = require('../controllers/userControllers/taskController')
 const foodController = require('../controllers/userControllers/foodControler')
 const planController = require('../controllers/adminControllers/planController')
-
 const auth = require('../middlewares/auth')
 
 {/* Profile*/}
@@ -42,8 +41,8 @@ router.get('/foodDB',auth.verifyUserToken,foodController.getFoodDB)
 router.get('/getFoodIntake',auth.verifyUserToken,foodController.getFoodIntake)
 router.post('/addFood',auth.verifyUserToken,foodController.addFood)
 
+{/* Plan*/}
 
-
-
+router.get('/myPlan',auth.verifyUserToken,planController.myPlan)
 
 module.exports = router

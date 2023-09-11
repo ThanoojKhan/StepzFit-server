@@ -1,4 +1,5 @@
 const planModel = require('../../models/planModels/planModel')
+const subscriptionModel = require('../../models/planModels/subscriptionModel')
 const traineeModel = require('../../models/userSideModels/userModel')
 
 
@@ -34,6 +35,26 @@ const planDetails = async (req, res) => {
     try {
         const planId = req.params.planId;
         const plan = await planModel.findOne({ _id: planId });
+        if (!plan) {
+            return res.status(404).json({ errMsg: "Plan not found" });
+        }
+        res.status(200).json({ plan });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ errMsg: "Server Error" });
+    }
+};
+
+//////////////MY PLAN DETAILS/////////////////
+
+const myPlan = async (req, res) => {
+    try {
+        const userId = req.payload.id;
+        const plan = await subscriptionModel
+            .findOne({ user: userId })
+            .populate('plan')
+            .sort({ endDate: 1 })
+            .exec();
         if (!plan) {
             return res.status(404).json({ errMsg: "Plan not found" });
         }
@@ -124,7 +145,7 @@ const deletePlan = async (req, res) => {
     try {
         const { planId } = req.params;
         const isPlanIdUsedInTrainee = await traineeModel.find({ planId: planId })
-        if (isPlanIdUsedInTrainee==null) {
+        if (isPlanIdUsedInTrainee == null) {
             return res.status(400).json({ errMsg: 'Plan cannot be deleted as it is subscribed to a trainee' });
         }
 
@@ -169,5 +190,6 @@ module.exports = {
     assignPlan,
     updatePlan,
     deletePlan,
-    planStatus
+    planStatus,
+    myPlan,
 }

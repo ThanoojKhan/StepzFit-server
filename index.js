@@ -8,6 +8,7 @@ const userRouter = require('./routers/userRouter')
 const adminRouter = require('./routers/adminRouter')
 const trainerRouter = require('./routers/trainerRouter')
 const chatRouter = require('./routers/chatRouter')
+const paymentRouter = require('./routers/paymentRouter')
 require('dotenv').config()
 
 const app = express()
@@ -21,6 +22,7 @@ app.use('/user', userRouter)
 app.use('/admin', adminRouter)
 app.use('/trainer', trainerRouter)
 app.use('/chat', chatRouter)
+app.use('/payment', paymentRouter)
 
 
 connectDb()
@@ -34,7 +36,6 @@ const io = require('socket.io')(server, {
         credentials: true
     }
 })
-
 
 io.on('connection', (socket) => {
 
@@ -55,3 +56,21 @@ io.on('connection', (socket) => {
         console.log("Socket disconnected");
     });
 })
+
+{ /*CRON*/ }
+
+const { spawn } = require('child_process');
+
+const deleteExpiredSubscriptionsProcess = spawn('node', ['deleteExpiredSubscriptions.js']);
+
+deleteExpiredSubscriptionsProcess.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+});
+
+deleteExpiredSubscriptionsProcess.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+});
+
+deleteExpiredSubscriptionsProcess.on('close', (code) => {
+    console.log(`Child process exited with code ${code}`);
+});
