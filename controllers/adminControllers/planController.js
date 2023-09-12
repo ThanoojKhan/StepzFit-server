@@ -53,7 +53,7 @@ const myPlan = async (req, res) => {
         const plan = await subscriptionModel
             .findOne({ user: userId })
             .populate('plan')
-            .sort({ endDate: 1 })
+            .sort({ endDate: -1 })
             .exec();
         if (!plan) {
             return res.status(404).json({ errMsg: "Plan not found" });

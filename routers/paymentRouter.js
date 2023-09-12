@@ -5,7 +5,7 @@ const auth = require('../middlewares/auth')
 const router = express.Router()
 
 router.post('/subscribePlan',auth.verifyUserToken,paymentController.subscribePlan)
-// router.get('/paymentSuccess',paymentController.paymentSuccess)
-router.get('/paymentSuccess',paymentController.paymentFail)
+router.get('/paymentSuccess',paymentController.paymentSuccess)
+router.get('/paymentFailed',paymentController.paymentFail)
 
 module.exports = router
