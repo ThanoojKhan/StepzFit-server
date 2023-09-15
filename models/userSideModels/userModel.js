@@ -17,6 +17,9 @@ const userSchema = mongoose.Schema({
     profileImage:{
         type:String,
     },
+    dashImage:{
+        type:String,
+    },
     trainerId:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Trainer',

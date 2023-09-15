@@ -21,6 +21,11 @@ router.get('/profile',auth.verifyUserToken,userController.loadProfile)
 router.post('/googleLogin',userController.googleLogin)
 router.patch('/editProfile',auth.verifyUserToken,userController.editProfile)
 
+{/* Dashboard*/}
+router.get('/dashBoard',auth.verifyUserToken,userController.loadDashboard)
+router.patch('/setDashImage',auth.verifyUserToken,userController.setDashImage)
+
+
 {/* Body Metrics*/}
 
 router.post('/addBodyMetrics',auth.verifyUserToken,bodyMetricsController.addBodyMetrics)

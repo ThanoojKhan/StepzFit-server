@@ -3,6 +3,10 @@ const planModel = require('../../models/planModels/planModel')
 const nodemailer = require('nodemailer')
 const sha256 = require('js-sha256')
 const { generateToken } = require('../../middlewares/auth')
+const tasksModel = require('../../models/userSideModels/tasksModel')
+const foodIntakeModel = require('../../models/userSideModels/foodIntakeModel')
+const subscriptionModel = require('../../models/planModels/subscriptionModel')
+const bodyMetricsModel = require('../../models/userSideModels/bodyMetricsModel')
 require('dotenv').config()
 
 
@@ -22,9 +26,9 @@ const getPlans = async (req, res) => {
 
 const getPlanDetails = async (req, res) => {
     const planId = req.params
-    console.log(planId+'=====');
+    console.log(planId + '=====');
     try {
-        const plans = await planModel.find({_id:planId})
+        const plans = await planModel.find({ _id: planId })
         res.status(200).json({ plans })
     } catch (error) {
         console.log(error.message);
@@ -291,10 +295,53 @@ const editProfile = async (req, res) => {
     }
 }
 
+/////////////////////LOAD DASHBOARD ////////////////
+
+const loadDashboard = async (req, res) => {
+    try {
+        const id = req.payload.id
+        const currentDate = new Date().toISOString().split('T')[0];
+
+        const user = await userModel.findOne({ _id: id }).populate('trainerId')
+        const plan = await subscriptionModel.findOne({ user: id }).sort({ endDate: -1 }).populate('plan')
+        const weight = await bodyMetricsModel.findOne({ traineeId: id }).sort({ date: -1 }).select('bodyWeight');
+        const tasks = await tasksModel.find({ traineeId: id, date: currentDate });
+        const foodIntake = await foodIntakeModel.find({ traineeId: id, date: currentDate })
+        res.json({ user, plan, weight, tasks, foodIntake });
+
+    } catch (error) {
+        res.status(500).json({ errMsg: "Server Error" })
+    }
+}
+
+/////////////////////SET DASH IMAGE ////////////////
+
+const setDashImage = async (req, res, newDashImage) => {
+    try {
+        const id = req.payload.id;
+        const result = await userModel.findOneAndUpdate(
+            { _id: id },
+            { $set: { dashImage: newDashImage } },
+            { upsert: true, new: true }
+        );
+
+        if (result) {
+            res.status(200).json({ message: "DashImage updated successfully." });
+        } else {
+            res.status(500).json({ errMsg: "Error updating DashImage." });
+        }
+    } catch (error) {
+        res.status(500).json({ errMsg: "Server Error" });
+    }
+};
+
+
 
 module.exports = {
     getPlans,
     getPlanDetails,
+    loadDashboard,
+    setDashImage,
     register,
     login,
     loadProfile,
