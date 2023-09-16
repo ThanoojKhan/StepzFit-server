@@ -23,8 +23,7 @@ router.patch('/editProfile',auth.verifyUserToken,userController.editProfile)
 
 {/* Dashboard*/}
 router.get('/dashBoard',auth.verifyUserToken,userController.loadDashboard)
-router.patch('/setDashImage',auth.verifyUserToken,userController.setDashImage)
-
+router.post('/setDashImage',auth.verifyUserToken,userController.setDashImage)
 
 {/* Body Metrics*/}
 
@@ -44,6 +43,7 @@ router.post('/markTaskAsDone/:taskId', auth.verifyUserToken, taskController.mark
 
 router.get('/foodDB',auth.verifyUserToken,foodController.getFoodDB)
 router.get('/getFoodIntake',auth.verifyUserToken,foodController.getFoodIntake)
+router.delete('/deleteFoodIntake/:id',auth.verifyUserToken,foodController.deleteFoodIntake)
 router.post('/addFood',auth.verifyUserToken,foodController.addFood)
 
 {/* Plan*/}

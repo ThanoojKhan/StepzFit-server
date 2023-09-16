@@ -316,12 +316,13 @@ const loadDashboard = async (req, res) => {
 
 /////////////////////SET DASH IMAGE ////////////////
 
-const setDashImage = async (req, res, newDashImage) => {
+const setDashImage = async (req, res) => {
     try {
         const id = req.payload.id;
+        const {selectedImage} = req.body;
         const result = await userModel.findOneAndUpdate(
             { _id: id },
-            { $set: { dashImage: newDashImage } },
+            { $set: { dashImage: selectedImage } },
             { upsert: true, new: true }
         );
 
@@ -334,7 +335,6 @@ const setDashImage = async (req, res, newDashImage) => {
         res.status(500).json({ errMsg: "Server Error" });
     }
 };
-
 
 
 module.exports = {
