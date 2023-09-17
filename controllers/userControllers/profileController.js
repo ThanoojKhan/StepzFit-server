@@ -300,13 +300,12 @@ const editProfile = async (req, res) => {
 const loadDashboard = async (req, res) => {
     try {
         const id = req.payload.id
-        const currentDate = new Date().toISOString().split('T')[0];
-
+        
         const user = await userModel.findOne({ _id: id }).populate('trainerId')
         const plan = await subscriptionModel.findOne({ user: id }).sort({ endDate: -1 }).populate('plan')
         const weight = await bodyMetricsModel.findOne({ traineeId: id }).sort({ date: -1 }).select('bodyWeight');
-        const tasks = await tasksModel.find({ traineeId: id, date: currentDate });
-        const foodIntake = await foodIntakeModel.find({ traineeId: id, date: currentDate })
+        const tasks = await tasksModel.find({ traineeId: id }).sort({ date: -1 }).limit(10);
+        const foodIntake = await foodIntakeModel.find({ traineeId: id }).sort({ date: -1 }).limit(10).populate('food')
         res.json({ user, plan, weight, tasks, foodIntake });
 
     } catch (error) {
@@ -319,7 +318,7 @@ const loadDashboard = async (req, res) => {
 const setDashImage = async (req, res) => {
     try {
         const id = req.payload.id;
-        const {selectedImage} = req.body;
+        const { selectedImage } = req.body;
         const result = await userModel.findOneAndUpdate(
             { _id: id },
             { $set: { dashImage: selectedImage } },
