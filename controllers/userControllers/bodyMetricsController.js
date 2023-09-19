@@ -7,28 +7,43 @@ require('dotenv').config()
 
 const addBodyMetrics = async (req, res) => {
     try {
-        const { bodyWeight, date, height, waist, hip, chest, arm, forearm, calf, thighs, bmi } = req.body;
+      const { bodyWeight, date, height, waist, hip, chest, arm, forearm, calf, thighs, bmi } = req.body;
+  
+      const currentDate = new Date();
+      const fifteenDaysAgo = new Date(currentDate);
+      fifteenDaysAgo.setDate(currentDate.getDate() - 15);
+  
+      const existingMetricsWithinLast15Days = await bodyMetricsModel.findOne({
+        traineeId: req.payload.id,
+        date: { $gte: fifteenDaysAgo, $lte: currentDate },
+      });
+  
+      if (!existingMetricsWithinLast15Days) {
         const newBodyMetrics = await bodyMetricsModel.create({
-            traineeId: req.payload.id,
-            bodyWeight,
-            height,
-            waist,
-            hip,
-            chest,
-            arm,
-            forearm,
-            calf,
-            thighs,
-            bmi,
-            date
+          traineeId: req.payload.id,
+          bodyWeight,
+          height,
+          waist,
+          hip,
+          chest,
+          arm,
+          forearm,
+          calf,
+          thighs,
+          bmi,
+          date,
         });
-
+  
         res.status(200).json({ message: "Body metrics added successfully", newBodyMetrics });
+      } else {
+        res.status(400).json({ errMsg: "Body metrics data found within the last 15 days" });
+      }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ errMsg: "Server Error" });
+      console.error(error);
+      res.status(500).json({ errMsg: "Server Error" });
     }
-};
+  };
+  
 
 /////////////////////GET BODY METRICS ////////////////
 
