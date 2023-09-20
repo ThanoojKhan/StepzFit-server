@@ -90,7 +90,6 @@ const editProfile = async (req, res) => {
 
 const profileImageChange = async (req, res) => {
     try {
-        console.log('hii')
         const { profileImage } = req.body
         await trainerModel.updateOne({ _id: req.payload.id }, { $set: { profileImage } })
         res.status(200).json({ message: "Profile updated successfully" })

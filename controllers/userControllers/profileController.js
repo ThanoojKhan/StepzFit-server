@@ -26,7 +26,6 @@ const getPlans = async (req, res) => {
 
 const getPlanDetails = async (req, res) => {
     const planId = req.params
-    console.log(planId + '=====');
     try {
         const plans = await planModel.find({ _id: planId })
         res.status(200).json({ plans })
