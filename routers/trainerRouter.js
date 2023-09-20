@@ -11,6 +11,7 @@ router.post('/login',profileController.login)
 router.post('/otpLogin',profileController.otpLogin)
 router.get('/trainerDetails',auth.verifyTrainerToken,profileController.loadTrainerProfile)
 router.patch('/editProfile',auth.verifyTrainerToken,profileController.editProfile)
+router.post('/profileImageChange',auth.verifyTrainerToken,profileController.profileImageChange)
 
 {/* Trainee Data*/}
 

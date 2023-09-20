@@ -10,7 +10,7 @@ const login = async (req, res) => {
     try {
         console.log('herer');
         let { email, password } = req.body
-        const trainer = await trainerModel.findOne({ $and: [{ email }, { password:password}] })
+        const trainer = await trainerModel.findOne({ $and: [{ email }, { password: password }] })
         if (!trainer) {
             res.status(401).json({ errMsg: "Email/Password does not match" })
         } else {
@@ -50,7 +50,7 @@ const otpLogin = async (req, res) => {
 ////////////////GET PROFILE DETAILS////////////
 
 const loadTrainerProfile = async (req, res) => {
-    try { 
+    try {
         const details = await trainerModel.findOne({ _id: req.payload.id })
         res.status(200).json({ details })
     } catch (error) {
@@ -68,19 +68,32 @@ const editProfile = async (req, res) => {
         let { name, profileImage, mobile } = req.body
         name = name.trim()
         let trainer = null
-        if(mobile){
-             trainer = await trainerModel.findOne({phone:mobile})
+        if (mobile) {
+            trainer = await trainerModel.findOne({ phone: mobile })
         }
-        if(trainer){
-            res.status(404).json({errMsg:"Mobile number already exist"})
-        }else{
-            if(mobile){
-                await trainerModel.updateOne({ _id: req.payload.id }, { $set: { name, profileImage, phone:mobile } })
-            }else{
-            await trainerModel.updateOne({ _id: req.payload.id }, { $set: { name, profileImage} })
+        if (trainer) {
+            res.status(404).json({ errMsg: "Mobile number already exist" })
+        } else {
+            if (mobile) {
+                await trainerModel.updateOne({ _id: req.payload.id }, { $set: { name, profileImage, phone: mobile } })
+            } else {
+                await trainerModel.updateOne({ _id: req.payload.id }, { $set: { name, profileImage } })
             }
             res.status(200).json({ message: "Profile updated successfully" })
         }
+    } catch (error) {
+        res.status(500).json({ errMsg: "Server Error" })
+    }
+}
+
+/////////////////////EDIT PROFILE ////////////////
+
+const profileImageChange = async (req, res) => {
+    try {
+        console.log('hii')
+        const { profileImage } = req.body
+        await trainerModel.updateOne({ _id: req.payload.id }, { $set: { profileImage } })
+        res.status(200).json({ message: "Profile updated successfully" })
     } catch (error) {
         res.status(500).json({ errMsg: "Server Error" })
     }
@@ -91,5 +104,6 @@ module.exports = {
     login,
     loadTrainerProfile,
     editProfile,
+    profileImageChange,
     otpLogin
 }
