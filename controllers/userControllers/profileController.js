@@ -270,8 +270,12 @@ const googleLogin = async (req, res) => {
 const loadProfile = async (req, res) => {
     try {
         const id = req.payload.id
-        const user = await userModel.findOne({ _id: id })
-        res.status(200).json({ user })
+        const user = await userModel.findOne({ _id: id }).populate('trainerId')
+        const taskCount = await tasksModel.find({ traineeId: id }).count();
+        const foodCount = await foodIntakeModel.find({ traineeId: id }).count();
+        const metricsCount = await bodyMetricsModel.find({ traineeId: id }).count();
+        const subscriptions = await subscriptionModel.find({ user: id }).populate('plan')
+        res.status(200).json({ user, taskCount, foodCount, metricsCount, subscriptions })
     } catch (error) {
         res.status(500).json({ errMsg: "Server Error" })
     }
@@ -282,10 +286,10 @@ const loadProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
     try {
-        let { name, profileImage, mobile } = req.body
+        let { name, profileImage, mobile, age, place, district, job, organization } = req.body
         name = name.trim()
         if (mobile) {
-            await userModel.updateOne({ _id: req.payload.id }, { $set: { name, profileImage, phone: mobile } })
+            await userModel.updateOne({ _id: req.payload.id }, { $set: { name, profileImage, phone: mobile, age, place, district, job, organization } })
         } else {
             await userModel.updateOne({ _id: req.payload.id }, { $set: { name, profileImage } })
         }
@@ -300,7 +304,7 @@ const editProfile = async (req, res) => {
 const loadDashboard = async (req, res) => {
     try {
         const id = req.payload.id
-        
+
         const user = await userModel.findOne({ _id: id }).populate('trainerId')
         const plan = await subscriptionModel.findOne({ user: id }).sort({ endDate: -1 }).populate('plan')
         const weight = await bodyMetricsModel.findOne({ traineeId: id }).sort({ date: -1 }).select('bodyWeight');
