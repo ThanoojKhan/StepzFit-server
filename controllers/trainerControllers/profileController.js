@@ -39,7 +39,7 @@ const otpLogin = async (req, res) => {
             }
             res.status(200).json({ data })
         } else {
-            res.status(404).json({ errMsg: "trainer not found" })
+            res.status(404).json({ errMsg: "Trainer not found" })
         }
     } catch (error) {
         res.status(500).json({ errMsg: "Server Error" })
@@ -50,7 +50,7 @@ const otpLogin = async (req, res) => {
 ////////////////GET PROFILE DETAILS////////////
 
 const loadTrainerProfile = async (req, res) => {
-    try { console.log('gettrainer');
+    try { 
         const details = await trainerModel.findOne({ _id: req.payload.id })
         res.status(200).json({ details })
     } catch (error) {
