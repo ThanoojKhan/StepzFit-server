@@ -4,11 +4,11 @@ const userModel = require('../models/userSideModels/userModel')
 
 
 module.exports = {
-    generateToken: (id,role) => {
+    generateToken: (id, role) => {
         const token = jwt.sign({ id, role }, process.env.JWTSECRET)
         return token
     },
-   
+
     verifyUserToken: async (req, res, next) => {
         try {
             let token = req.headers.authorization
@@ -20,9 +20,9 @@ module.exports = {
             }
 
             const verified = jwt.verify(token, process.env.JWTSECRET)
-            const user = await userModel.findOne({_id:verified.id})
+            const user = await userModel.findOne({ _id: verified.id })
 
-            if (verified.role === 'user'&&!user.isBlocked) {
+            if (verified.role === 'user' && !user.isBlocked) {
                 req.payload = verified
                 next()
             } else {
@@ -59,7 +59,7 @@ module.exports = {
     },
 
     verifyAdminToken: async (req, res, next) => {
-        try { 
+        try {
             let token = req.headers.authorization
             if (!token) {
                 return res.status(403).json({ errMsg: "Access Denied" })
@@ -83,7 +83,7 @@ module.exports = {
     },
 
     verifyChatToken: async (req, res, next) => {
-        try { 
+        try {
             let token = req.headers.authorization
             if (!token) {
                 return res.status(403).json({ errMsg: "Access Denied" })
