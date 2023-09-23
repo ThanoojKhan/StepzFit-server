@@ -26,7 +26,7 @@ const accessChat = async (req, res) => {
                 latestMessage: null
             })
 
-            const chat = await chatModel.findOne({ _id: newChat._id }).populate('users').populate('latestMessage')
+            const chat = await chatModel.findOne({ _id: newChat._id }).populate('users', '-password').populate('latestMessage')
             const messages = await messageModel.find({ chatId: chat._id })
             res.status(200).json({ chat, messages })
         }
@@ -41,8 +41,8 @@ const accessChat = async (req, res) => {
 
 const getUsers = async (req, res) => {
     try {
-        const trainees = await userModel.find({ trainerId: req.payload.id }).populate('trainerId');
-        const admin = await adminModel.findOne()
+        const trainees = await userModel.find({ trainerId: req.payload.id }).populate('trainerId').select('-password');;
+        const admin = await adminModel.findOne().select('-password');
         res.status(200).json({ trainees, admin })
     } catch (error) {
         console.log(error)
@@ -55,9 +55,9 @@ const getUsers = async (req, res) => {
 
 const getAllDetails = async (req, res) => {
     try {
-        const trainees = await userModel.find();
-        const trainers = await trainerModel.find();
-        const admin = await adminModel.findOne()
+        const trainees = await userModel.find().select('-password');
+        const trainers = await trainerModel.find().select('-password');
+        const admin = await adminModel.findOne().select('-password');
         res.status(200).json({ trainees, admin, trainers })
 
     } catch (error) {
@@ -83,15 +83,53 @@ const addMessage = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
 //////////////////GET USERS new chat controller///////////////////
+
+//////////////////ADMIN CHAT LIST/////////////
+
+const getAdminChatList = async (req, res, next) => {
+    try {
+        const trainees = await userModel.find().select('-password');
+        const trainers = await trainerModel.find().select('-password');
+        const admin = await adminModel.findOne().select('-password');
+        res.status(200).json({ trainees, admin, trainers })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ errMsg: error.message })
+    }
+}
+
+
+//////////////////TRAINER CHAT LIST/////////////
+
+const getTrainerChatList = async (req, res, next) => {
+    try {
+        const trainees = await userModel.find({ trainerId: req.payload.id }).populate('trainerId').select('-password');;
+        const admin = await adminModel.findOne().select('-password');
+        res.status(200).json({ trainees, admin })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ errMsg: error.message })
+    }
+}
+
+//////////////////USER CHAT LIST/////////////
+
+const getUserChatList = async (req, res, next) => {
+    try {
+        const trainer = await userModel.findOne({ _id: req.payload.id }).populate('trainerId').select('-password');;
+        const admin = await adminModel.findOne().select('-password');
+        res.json({ trainer: trainer.trainerId, admin });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ errMsg: error.message })
+    }
+}
+
+
+
+
+
 
 const chat = async (req, res, next) => {
     try {
@@ -194,10 +232,14 @@ module.exports = {
     accessChat,
     getUsers,
     addMessage,
-    getAllDetails, 
-    chat, 
-    getChatList, 
-    sendMessage, 
-    getAllMessages, 
-    unreadMessage
+    getAllDetails,
+    chat,
+    getChatList,
+    sendMessage,
+    getAllMessages,
+    unreadMessage,
+
+    getUserChatList,
+    getAdminChatList,
+    getTrainerChatList,
 }

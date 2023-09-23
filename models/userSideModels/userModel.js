@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
     required: true,
   },
   phone: {
-    type: String, // Changed to String to store as a string
+    type: String,
   },
   password: {
     type: String,

@@ -23,8 +23,8 @@ const getTasks = async (req, res) => {
 
 const getTrainerDetails = async (req, res) => {
   try {
-    const trainer = await userModel.findOne({ _id: req.payload.id }).populate('trainerId');
-    const admin = await adminModel.findOne()
+    const trainer = await userModel.findOne({ _id: req.payload.id }).populate('trainerId').select('-password');;
+    const admin = await adminModel.findOne().select('-password');
     res.json({ trainer, admin });
   } catch (error) {
     console.error(error);
