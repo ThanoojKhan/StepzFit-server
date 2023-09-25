@@ -1,4 +1,5 @@
 const userModel = require('../../models/userSideModels/userModel')
+const subscriptionModel = require('../../models/planModels/subscriptionModel')
 const nodemailer = require('nodemailer')
 require('dotenv').config()
 
@@ -69,7 +70,22 @@ const users = async (req, res) => {
     }
 }
 
+//////////////GET SUBSCRIPTION/////////////////
+
+const subs = async (req, res) => {
+    try {
+        const userId = req.params.userId
+        const subs = await subscriptionModel.find({ user: userId }).populate('plan').sort({ startDate: -1 });
+        console.log(subs+'hiii');
+        res.status(200).json({ subs })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ errMsg: "Server Error" })
+    }
+}
+
 module.exports = {
     userStatus,
     users,
+    subs,
 }

@@ -4,14 +4,21 @@ const loginController = require('../controllers/adminControllers/LoginController
 const traineeController = require('../controllers/adminControllers/traineeController')
 const trainerController = require('../controllers/adminControllers/trainerController')
 const planController = require('../controllers/adminControllers/planController')
+const dashBoardController =require('../controllers/adminControllers/dashBoardController')
 
 const auth = require('../middlewares/auth')
 
 {/* Admin*/}
 router.post('/login',loginController.login)
 
+{/* Dashboard*/}
+
+router.get('/dashboard',auth.verifyAdminToken,dashBoardController.dashBoard)
+
+
 {/* Trainee Tab*/}
 router.get('/users',auth.verifyAdminToken,traineeController.users)
+router.get('/subs/:userId',auth.verifyAdminToken,traineeController.subs)
 router.patch('/userStatus',auth.verifyAdminToken,traineeController.userStatus)
 
 {/*Trainer Tab*/}

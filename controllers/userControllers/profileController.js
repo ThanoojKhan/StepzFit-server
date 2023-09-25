@@ -269,7 +269,11 @@ const googleLogin = async (req, res) => {
 const loadProfile = async (req, res) => {
     try {
         const id = req.payload.id
-        const user = await userModel.findOne({ _id: id }).populate('trainerId')
+        const user = await userModel.findOne({ _id: id })
+            .populate({
+                path: 'trainerId',
+                select: '-userName -password',
+            })
         const taskCount = await tasksModel.find({ traineeId: id }).count();
         const foodCount = await foodIntakeModel.find({ traineeId: id }).count();
         const metricsCount = await bodyMetricsModel.find({ traineeId: id }).count();
