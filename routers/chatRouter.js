@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.post('/accessChat',auth.verifyChatToken,chatController.accessChat)
 router.get('/traineeDetails',auth.verifyChatToken,chatController.getUsers)
+router.get('/userChatList',auth.verifyChatToken,chatController.getUserChatList)
 router.get('/allDetails',auth.verifyChatToken,chatController.getAllDetails)
 router.post('/addMessage',auth.verifyChatToken,chatController.addMessage)
 

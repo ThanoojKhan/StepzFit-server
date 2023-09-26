@@ -12,11 +12,10 @@ const accessChat = async (req, res) => {
         const userId = req.payload.id
         const { receiverId } = req.body
         const chat = await chatModel.findOne({
-            $and: [
-                { users: { $in: [userId] } },
-                { users: { $in: [receiverId] } }
-            ]
-        }).populate('users').populate('latestMessage').sort({ updatedAt: -1 })
+            users: { $all: [userId, receiverId] }
+        })
+            .populate('latestMessage')
+            .sort({ updatedAt: -1 });
         if (chat) {
             const messages = await messageModel.find({ chatId: chat._id })
             res.status(200).json({ chat, messages })
@@ -41,6 +40,7 @@ const accessChat = async (req, res) => {
 
 const getUsers = async (req, res) => {
     try {
+
         const trainees = await userModel.find({ trainerId: req.payload.id }).populate('trainerId').select('-password');;
         const admin = await adminModel.findOne().select('-password');
         res.status(200).json({ trainees, admin })
@@ -50,6 +50,22 @@ const getUsers = async (req, res) => {
     }
 }
 
+
+//////////////////USER CHAT LIST/////////////
+
+const getUserChatList = async (req, res, next) => {
+    try {
+        const userId = req.payload.id
+        const latestMessage = await chatModel.findOne({ users: { $all: [userId] } }).populate('latestMessage');
+        const trainerDetails = await userModel.findOne({ _id: req.payload.id }).populate('trainerId').select('-password');;
+        const trainer = trainerDetails.trainerId
+        const admin = await adminModel.findOne().select('-password');
+        res.json({ trainer, admin, latestMessage });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ errMsg: error.message })
+    }
+}
 
 //////////////////GET ALL DETAILS///////////////////
 
@@ -113,18 +129,7 @@ const getTrainerChatList = async (req, res, next) => {
     }
 }
 
-//////////////////USER CHAT LIST/////////////
 
-const getUserChatList = async (req, res, next) => {
-    try {
-        const trainer = await userModel.findOne({ _id: req.payload.id }).populate('trainerId').select('-password');;
-        const admin = await adminModel.findOne().select('-password');
-        res.json({ trainer: trainer.trainerId, admin });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ errMsg: error.message })
-    }
-}
 
 
 

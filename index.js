@@ -26,6 +26,7 @@ app.use('/payment', paymentRouter)
 
 
 connectDb()
+
 const server = app.listen(process.env.PORT, () => {
     console.log('server started');
 })
@@ -50,33 +51,13 @@ io.on('connection', (socket) => {
 
     socket.on('new message', (newMessage, room) => {
         io.emit('messageResponse', newMessage, room);
+        console.log(newMessage)
     });
 
     socket.on('disconnect', () => {
         console.log("Socket disconnected");
     });
 })
-
-
-// io.of("/chat").on("connection", (socket) => {
-//     socket.on("setup", (userId) => {
-//       socket.join(userId);
-//     });
-//   console.log(socket.id);
-//     socket.on("newMessage", (message, chatId,storeId) => {
-//       io.of("/chat").emit("messageResponse", message, chatId,storeId);
-//       addMessage(chatId, message);
-//     });
-  
-//     socket.on("read", (chatId, storeId) => {
-//       markMessagesAsRead(chatId, storeId);
-//       io.of("/chat").emit("readResponse", chatId, storeId);
-//     });
-//     socket.on("typing", (isTyping, Id, storeId) => {
-//       io.of("/chat").emit("typing", isTyping, Id, storeId);
-//     });
-//   });
-
 
 
 { /*CRON*/ }
