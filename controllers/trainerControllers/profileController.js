@@ -8,7 +8,6 @@ require('dotenv').config()
 
 const login = async (req, res) => {
     try {
-        console.log('herer');
         let { email, password } = req.body
         const trainer = await trainerModel.findOne({ $and: [{ email }, { password: password }] })
         if (!trainer) {
