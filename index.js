@@ -38,7 +38,7 @@ const server = app.listen(process.env.PORT, () => {
 
 const io = require('socket.io')(server, {
     cors: {
-        origin: process.env.SOCKETURL,
+        origin: '*',
         credentials: true
     }
 })
