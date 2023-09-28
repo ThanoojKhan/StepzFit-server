@@ -76,7 +76,6 @@ const subs = async (req, res) => {
     try {
         const userId = req.params.userId
         const subs = await subscriptionModel.find({ user: userId }).populate('plan').sort({ startDate: -1 });
-        console.log(subs+'hiii');
         res.status(200).json({ subs })
     } catch (error) {
         console.log(error.message);

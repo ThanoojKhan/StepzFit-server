@@ -56,7 +56,6 @@ io.on('connection', (socket) => {
 
     socket.on('new message', (newMessage, room) => {
         io.emit('messageResponse', newMessage, room);
-        console.log(newMessage)
     });
 
     socket.on('disconnect', () => {
