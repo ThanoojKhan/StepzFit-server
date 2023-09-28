@@ -13,8 +13,10 @@ require('dotenv').config()
 
 const app = express()
 const corsOptions = {
-    origin: ["*"],
-};
+    origin: ["http://localhost:5173","https://www.stepzfit.online"], 
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
+  };
 
 app.use(morgan('dev'))
 app.use(cors(corsOptions))
