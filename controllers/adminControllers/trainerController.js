@@ -44,7 +44,6 @@ const trainerDetails = async (req, res) => {
 const addTrainer = async (req, res) => {
     try {
         let { firstName, secondName, email, dob, gender, phone, department, certification, userName, password, addedDate } = req.body
-        console.log("dfg" + req.body);
         email = email.trim()
         password = password.trim()
         const trainer = await trainerModel.findOne({ $or: [{ email }, { phone }] })
@@ -67,7 +66,6 @@ const addTrainer = async (req, res) => {
 const assignTrainer = async (req, res) => {
     try {
         let { selectedTrainee, selectedTrainer } = req.body
-        console.log(req.body);
         await traineeModel.updateOne({ _id: selectedTrainee }, { $set: { trainerId: selectedTrainer } })
         res.status(200).json({ message: `Trainer Asssigned` })
 

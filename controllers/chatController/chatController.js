@@ -71,7 +71,6 @@ const getUserChatList = async (req, res, next) => {
 
 const getAllDetails = async (req, res) => {
     try {
-        console.log('here i am');
         const trainees = await userModel.find().select('-password');
         const trainers = await trainerModel.find().select('-password');
         const admin = await adminModel.findOne().select('-password');
