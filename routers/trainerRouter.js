@@ -3,6 +3,7 @@ const router = express.Router()
 const profileController = require('../controllers/trainerControllers/profileController')
 const traineeController = require('../controllers/trainerControllers/traineeDataController')
 const taskManagerController = require('../controllers/trainerControllers/taskScheduler')
+const dashBoardController = require('../controllers/trainerControllers/dashBoardController')
 const auth = require('../middlewares/auth')
 
 {/* Profile*/}
@@ -26,6 +27,7 @@ router.post('/scheduleTask/:traineeId',auth.verifyTrainerToken,taskManagerContro
 router.put('/editTask/:taskId', auth.verifyTrainerToken, taskManagerController.editTask);
 router.delete('/deleteTask/:taskId', auth.verifyTrainerToken, taskManagerController.deleteTask);
 
+router.get('/dashBoard',auth.verifyTrainerToken,dashBoardController.getDashBoard)
 
 
 module.exports = router
