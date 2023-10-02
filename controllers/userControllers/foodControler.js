@@ -8,7 +8,7 @@ require('dotenv').config()
 const getFoodDB = async (req, res) => {
 
   try {
-    const foods = await foodDBModel.find();
+    const foods = await foodDBModel.find().select('name');
     res.json({ foods });
   } catch (error) {
     console.error(error);
