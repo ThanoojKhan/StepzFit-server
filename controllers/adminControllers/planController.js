@@ -7,7 +7,7 @@ const traineeModel = require('../../models/userSideModels/userModel')
 
 const plans = async (req, res) => {
     try {
-        const plans = await planModel.find({})
+        const plans = await planModel.find({ isActive: true }).select('-imageSrc -description')
         res.status(200).json({ plans })
     } catch (error) {
         console.log(error.message);

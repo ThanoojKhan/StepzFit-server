@@ -14,7 +14,7 @@ require('dotenv').config()
 
 const getPlans = async (req, res) => {
     try {
-        const plans = await planModel.find({})
+        const plans = await planModel.find().select('-imageSrc -description')
         res.status(200).json({ plans })
     } catch (error) {
         console.log(error.message);
@@ -277,7 +277,10 @@ const loadProfile = async (req, res) => {
         const taskCount = await tasksModel.find({ traineeId: id }).count();
         const foodCount = await foodIntakeModel.find({ traineeId: id }).count();
         const metricsCount = await bodyMetricsModel.find({ traineeId: id }).count();
-        const subscriptions = await subscriptionModel.find({ user: id }).populate('plan')
+        const subscriptions = await subscriptionModel.find({ user: id }).populate({
+            path: 'plan',
+            select: 'name',
+        })
         res.status(200).json({ user, taskCount, foodCount, metricsCount, subscriptions })
     } catch (error) {
         res.status(500).json({ errMsg: "Server Error" })
@@ -307,14 +310,17 @@ const editProfile = async (req, res) => {
 const loadDashboard = async (req, res) => {
     try {
         const id = req.payload.id
-
-        const user = await userModel.findOne({ _id: id }).populate('trainerId')
-        const plan = await subscriptionModel.findOne({ user: id }).sort({ endDate: -1 }).populate('plan')
+        const user = await userModel.findOne({ _id: id }).populate({
+            path: 'trainerId',
+            select: 'firstName secondName gender department certification profileImage',
+        }).select('name dashImage')
         const weight = await bodyMetricsModel.findOne({ traineeId: id }).sort({ date: -1 }).select('bodyWeight');
         const tasks = await tasksModel.find({ traineeId: id }).sort({ date: -1 }).limit(10);
-        const foodIntake = await foodIntakeModel.find({ traineeId: id }).sort({ date: -1 }).limit(10).populate('food')
-        res.json({ user, plan, weight, tasks, foodIntake });
-
+        const foodIntake = await foodIntakeModel.find({ traineeId: id }).sort({ date: -1 }).limit(10).populate({
+            path: 'food',
+            select: 'name calories serving',
+        })
+        res.json({ user, weight, tasks, foodIntake });
     } catch (error) {
         res.status(500).json({ errMsg: "Server Error" })
     }
