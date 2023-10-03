@@ -21,7 +21,12 @@ const getFoodDB = async (req, res) => {
 const getFoodIntake = async (req, res) => {
 
   try {
-    const foodIntake = await foodIntakeModel.find({ traineeId: req.payload.id }).populate('food')
+    const foodIntake = await foodIntakeModel.find({ traineeId: req.payload.id })
+      .populate({
+        path: 'food',
+        select: 'name fat calories proteins carbohydrates serving',
+      }).sort({ date: -1 })
+      .limit(10)
     res.json({ foodIntake });
   } catch (error) {
     console.error(error);
