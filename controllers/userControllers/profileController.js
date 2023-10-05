@@ -202,6 +202,7 @@ const forgottPassword = async (req, res) => {
         const user = await userModel.findOne({ email })
         if (user) {
             sendForgottPasswordMail(email, user.name, user._id)
+            res.status(200).json({ message: 'Password Reset Link Sent To Email' })
         } else {
             res.status(400).json({ errMsg: 'User not found' })
         }
