@@ -3,6 +3,8 @@ const Stripe = require('stripe')
 const planModel = require('../../models/planModels/planModel')
 const subscriptionModel = require('../../models/planModels/subscriptionModel')
 const userModel = require('../../models/userSideModels/userModel')
+const { validationResult, param } = require('express-validator');
+const mongoose = require('mongoose');
 require('dotenv').config()
 
 const stripe = Stripe(process.env.STRIPE_KEY)
@@ -70,23 +72,52 @@ const subscribePlan = async (req, res) => {
 };
 
 
+const isValidDate = (value) => {
+  const regexDate = /^\d{4}-\d{2}-\d{2}$/;
+  return regexDate.test(value);
+};
+
 const paymentSuccess = async (req, res) => {
   try {
+    await Promise.all([
+      param('planId').custom((value) => {
+        if (!mongoose.Types.ObjectId.isValid(value)) {
+          throw new Error('Invalid planId');
+        }
+        return true;
+      }),
+      param('startDate').custom((value) => {
+        if (!isValidDate(value)) {
+          throw new Error('Invalid format');
+        }
+        return true;
+      }),
+      param('endDate').custom((value) => {
+        if (!isValidDate(value)) {
+          throw new Error('Invalid format');
+        }
+        return true;
+      }),
+    ])(req);
 
-    const { planId, startDate, endDate, userId } = req.query
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { planId, startDate, endDate, userId } = req.query;
+
     await subscriptionModel.create({
       user: userId,
       plan: planId,
       startDate: startDate,
       endDate: endDate,
-    })
+    });
 
-    await subscriptionModel.updateOne({ user: userId, plan: planId, startDate: startDate, endDate: endDate })
-
-    res.redirect(`${process.env.FRONTENDURL}/paymentSuccess`)
+    res.redirect(`${process.env.FRONTENDURL}/paymentSuccess?userId=${userId}&planId=${planId}&startDate=${startDate}`);
   } catch (error) {
-    res.status(500).json({ errMsg: 'Server Error' })
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ errMsg: 'Server Error' });
   }
 }
 
