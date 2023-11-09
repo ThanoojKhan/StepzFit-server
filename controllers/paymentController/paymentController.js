@@ -22,7 +22,10 @@ const subscribePlan = async (req, res) => {
     const endDate = new Date(currentDate);
     endDate.setDate(currentDate.getDate() + 30);
 
-    const existingSubscription = await subscriptionModel.findOne({ user: userId, expired: false }).populate('plan')
+    const existingSubscription = await subscriptionModel
+      .findOne({ user: userId, expired: false })
+      .populate('plan')
+      .exec();
     if (existingSubscription) {
       return res.status(409).json({ errMsg: `Already Subscribed to ${existingSubscription?.plan?.name}` });
     } else {
