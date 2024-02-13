@@ -1,6 +1,5 @@
 const foodDBModel = require('../../models/userSideModels/foodDBModel')
 const foodIntakeModel = require('../../models/userSideModels/foodIntakeModel')
-
 require('dotenv').config()
 
 /////////////////////GET FOODS ////////////////

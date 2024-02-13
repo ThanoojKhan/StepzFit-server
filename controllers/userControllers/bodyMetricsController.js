@@ -1,7 +1,5 @@
 const bodyMetricsModel = require('../../models/userSideModels/bodyMetricsModel')
-
 require('dotenv').config()
-
 
 /////////////////////ADD BODY METRICS ////////////////
 

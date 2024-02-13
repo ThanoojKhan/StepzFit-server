@@ -53,7 +53,7 @@ const sendVerifyMail = async (name, email, userId) => {
         const mailOption = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Email verification',
+            subject: 'StepzFit Wellness - Email verification',
             html: `<p>Hii ${name}, Click <a href="${process.env.FRONTENDURL}/emailVerify/${userId}">here</a> to verify your email.</p>`,
         };
 
@@ -89,7 +89,7 @@ const sendForgottPasswordMail = async (email, name, userId) => {
         const mailOption = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Forgott password',
+            subject: 'StepzFit Wellness - Forgott password',
             html: `<p>Hii ${name}, Click <a href="${process.env.FRONTENDURL}/resetPassword/${userId}">here</a> to reset your password.</p>`,
         };
 

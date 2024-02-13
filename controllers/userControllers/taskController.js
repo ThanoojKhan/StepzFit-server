@@ -1,8 +1,6 @@
 const tasksModel = require('../../models/userSideModels/tasksModel');
 const userModel = require('../../models/userSideModels/userModel')
 const adminModel = require('../../models/adminSideModels/adminModel')
-
-
 require('dotenv').config()
 
 /////////////////////GET TASKS ////////////////
