@@ -53,9 +53,18 @@ const sendVerifyMail = async (name, email, userId) => {
         const mailOption = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'StepzFit Wellness - Email verification',
-            html: `<p>Hii ${name}, Click <a href="${process.env.FRONTENDURL}/emailVerify/${userId}">here</a> to verify your email.</p>`,
+            subject: 'StepzFit Wellness - Email Verification ',
+            html: `
+                <p>Hi ${name}!</p>
+                <p>Welcome to StepzFit Wellness! 🎉</p>
+                <p>To start your fitness journey and access all the amazing features, please verify your email address by clicking the link below:</p>
+                <p><a href="${process.env.FRONTENDURL}/emailVerify/${userId}">🔗 Verify Email</a></p>
+                <p>If you didn't sign up for StepzFit Wellness, please ignore this email.</p>
+                <p>Stay healthy and fit with StepzFit Wellness! 💪</p>
+                <p>Best regards,<br>The StepzFit Team</p>
+            `,
         };
+        
 
         transporter.sendMail(mailOption, (error, info) => {
             if (error) {
@@ -89,9 +98,18 @@ const sendForgottPasswordMail = async (email, name, userId) => {
         const mailOption = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'StepzFit Wellness - Forgott password',
-            html: `<p>Hii ${name}, Click <a href="${process.env.FRONTENDURL}/resetPassword/${userId}">here</a> to reset your password.</p>`,
+            subject: 'Reset Your Password for StepzFit Wellness',
+            html: `
+                <p>Hi there, ${name}!</p>
+                <p>It seems like you've forgotten your password for StepzFit Wellness. Don't worry, we've got you covered! 🛡️</p>
+                <p>To reset your password and regain access to your account, simply click on the link below:</p>
+                <p><a href="${process.env.FRONTENDURL}/resetPassword/${userId}">🔗 Reset Password</a></p>
+                <p>If you didn't request this password reset, please ignore this email.</p>
+                <p>Stay healthy and fit with StepzFit Wellness! 💪</p>
+                <p>Best regards,<br>The StepzFit Team</p>
+            `,
         };
+        
 
         transporter.sendMail(mailOption, (error, info) => {
             if (error) {
