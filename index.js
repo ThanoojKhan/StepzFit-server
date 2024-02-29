@@ -1,4 +1,3 @@
-require('dotenv').config()
 const morgan = require('morgan')
 const express = require('express')
 const cors = require('cors')
@@ -20,7 +19,7 @@ const corsOptions = {
 
 app.use(morgan('dev'))
 app.use(cors(corsOptions))
-app.use(express.json({ limit: '100mb', extended: true }))
+app.use(express.json({ limit: '10mb', extended: true }))
 app.use(cookieParser())
 
 app.use('/user', userRouter)
@@ -29,16 +28,18 @@ app.use('/trainer', trainerRouter)
 app.use('/chat', chatRouter)
 app.use('/payment', paymentRouter)
 
-
 connectDb()
 
 const server = app.listen(process.env.PORT, () => {
     console.log('server started');
 })
 
+
+{ /*SOCKET*/ }
+
 const io = require('socket.io')(server, {
     cors: {
-        origin: '*',
+        origin: 'http://localhost:5173", "https://www.stepzfit.online", "https://stepzfit.online',
         credentials: true
     }
 })
